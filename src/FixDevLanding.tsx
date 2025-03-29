@@ -4,7 +4,7 @@ import {motion} from "framer-motion";
 
 const content = {
     ru: {
-        title: "FixDev.io",
+        title: "FixDev.io test",
         subtitle: "Разработка backend-систем на Kotlin • Java • Spring • Temporal",
         intro: [
             "Привет! Меня зовут Константин Пиксотов. Я backend-инженер и обожаю создавать надёжные, масштабируемые системы.",
