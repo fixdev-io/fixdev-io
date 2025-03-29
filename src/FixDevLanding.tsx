@@ -71,7 +71,7 @@ const FixDevLanding = () => {
             <header
                 className="w-full px-6 py-4 border-b border-gray-800 shadow-sm flex justify-between items-center max-w-6xl mx-auto">
                 <div className="flex items-center space-x-4">
-                    <img src="/img/avatar_circular.png" alt="Константин Пиксотов"
+                    <img src="/img/avatar_circular.jpg" alt="Константин Пиксотов"
                          className="w-20 h-20 sm:w-32 sm:h-32 rounded-full object-cover border border-gray-600 shadow-sm"/>
                 </div>
                 <img src="/img/fixdev-logo-horizontal.png" alt="FixDev Logo" className="h-20"/>
