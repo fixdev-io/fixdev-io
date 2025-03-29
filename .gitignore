@@ -1,3 +1,11 @@
-node_modules/*
-/.idea/modules.xml
-/.idea/lending.iml
+# macOS system files
+.DS_Store
+
+# Node.js dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+/.idea/**
+
