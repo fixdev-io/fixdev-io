@@ -2,9 +2,23 @@ import React, {useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {motion} from "framer-motion";
 
+const projects = {
+    campaignManager: {
+        ru: {
+            title: "Campaign Manager",
+            description: "автоматизация маркетинга с сегментацией, политикой контактов и аналитикой."
+        },
+        en: {
+            title: "Campaign Manager",
+            description: "backend-driven marketing automation with segmentation, contact policy, and analytics."
+        },
+        link: "https://github.com/fixdev-io/campaign-manager/blob/main/docs/ru/architecture.md"
+    }
+};
+
 const content = {
     ru: {
-        title: "FixDev.io",
+        title: "FixDev.io test",
         subtitle: "Разработка backend-систем на Kotlin • Java • Spring • Temporal",
         intro: [
             "Привет! Меня зовут Константин Пиксотов. Я backend-инженер и обожаю создавать надёжные, масштабируемые системы.",
@@ -18,7 +32,10 @@ const content = {
         cta: "🚀 Let's work together",
         footer: "Orchestrating Backends",
         projectList: [
-            "Campaign Manager: backend-driven marketing automation with segmentation, contact policy, and analytics.",
+            <li key="campaign-manager">
+                <a href={projects.campaignManager.link} className="text-blue-400 hover:underline">
+                    {projects.campaignManager.ru.title}</a>: {projects.campaignManager.ru.description}
+            </li>,
         ],
         techList: [
             "Kotlin, Java, Spring Boot",
@@ -42,7 +59,10 @@ const content = {
         cta: "🚀 Let's work together",
         footer: "Orchestrating Backends",
         projectList: [
-            "Campaign Manager: backend-driven marketing automation with segmentation, contact policy, and analytics.",
+            <li key="campaign-manager">
+                <a href={projects.campaignManager.link} className="text-blue-400 hover:underline">
+                    {projects.campaignManager.en.title}</a>: {projects.campaignManager.en.description}
+            </li>,
         ],
         techList: [
             "Kotlin, Java, Spring Boot",
@@ -81,8 +101,8 @@ const FixDevLanding = () => {
                         onChange={handleLanguageChange}
                         className="bg-gray-800 border border-gray-700 text-white py-2 px-3 rounded shadow-sm focus:outline-none"
                     >
-                        <option value="ru">🇷🇺 Русский</option>
-                        <option value="en">🇬🇧 English</option>
+                        <option value="ru">🇷🇺 Русский </option>
+                        <option value="en">🇬🇧 English </option>
                     </select>
                 </div>
             </header>
@@ -114,8 +134,8 @@ const FixDevLanding = () => {
 
                 <div className="mt-14">
                     <h2 className="text-xl font-semibold mb-3 text-blue-300">{t.projects}</h2>
-                    <ul className="list-disc list-inside space-y-2 text-gray-300">
-                        {t.projectList.map((p, idx) => <li key={idx}>{p}</li>)}
+                    <ul className="space-y-2 text-gray-300">
+                        {t.projectList}
                     </ul>
                 </div>
 
