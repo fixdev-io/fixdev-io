@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/admin-base}">
+<head><title>Статьи</title></head>
+<body>
+<main layout:fragment="content">
+    <h1>Статьи</h1>
+    <a th:href="@{/admin/articles/new}">+ Новая статья</a>
+    <table style="width:100%;margin-top:1rem;">
+        <tr><th>Заголовок</th><th>Статус</th><th>Дата</th><th></th></tr>
+        <tr th:each="article : ${articles.content}">
+            <td><a th:href="@{/admin/articles/{id}/edit(id=${article.id})}" th:text="${article.title}"></a></td>
+            <td th:text="${article.status}"></td>
+            <td th:text="${#temporals.format(article.createdAt, 'dd.MM.yyyy')}"></td>
+            <td>
+                <form th:action="@{/admin/articles/{id}/delete(id=${article.id})}" method="post" style="display:inline">
+                    <button type="submit" onclick="return confirm('Удалить?')">✕</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</main>
+</body>
+</html>

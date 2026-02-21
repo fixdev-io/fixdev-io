@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/admin-base}">
+<head><title>Редактирование статьи</title></head>
+<body>
+<main layout:fragment="content">
+    <h1 th:text="${article != null} ? 'Редактирование' : 'Новая статья'">Статья</h1>
+    <form th:action="${article != null} ? @{/admin/articles/{id}/edit(id=${article.id})} : @{/admin/articles/new}"
+          method="post" th:object="${form}">
+        <div>
+            <label>Заголовок</label>
+            <input type="text" th:field="*{title}" required style="width:100%;padding:0.5rem;">
+        </div>
+        <div style="margin-top:1rem;">
+            <label>Контент</label>
+            <textarea id="content" th:field="*{content}"></textarea>
+        </div>
+        <div style="margin-top:1rem;">
+            <label>Краткое описание</label>
+            <textarea th:field="*{excerpt}" rows="3" style="width:100%;padding:0.5rem;"></textarea>
+        </div>
+        <div style="margin-top:1rem;">
+            <label>URL обложки</label>
+            <input type="text" th:field="*{coverImageUrl}" style="width:100%;padding:0.5rem;">
+        </div>
+        <div style="margin-top:1rem;">
+            <label>SEO заголовок</label>
+            <input type="text" th:field="*{seoTitle}" style="width:100%;padding:0.5rem;">
+        </div>
+        <div style="margin-top:1rem;">
+            <label>SEO описание</label>
+            <textarea th:field="*{seoDescription}" rows="2" style="width:100%;padding:0.5rem;"></textarea>
+        </div>
+        <div style="margin-top:1rem;">
+            <label>Теги</label>
+            <select th:field="*{tagIds}" multiple style="width:100%;min-height:80px;">
+                <option th:each="tag : ${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
+            </select>
+        </div>
+        <div style="margin-top:1rem;">
+            <label><input type="checkbox" th:field="*{publish}"> Опубликовать</label>
+        </div>
+        <button type="submit" style="margin-top:1rem;padding:0.5rem 2rem;">Сохранить</button>
+    </form>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#content',
+            height: 500,
+            plugins: 'image code codesample link lists',
+            toolbar: 'undo redo | blocks | bold italic | link image codesample | bullist numlist',
+            images_upload_url: '/admin/media/upload'
+        });
+    </script>
+</main>
+</body>
+</html>

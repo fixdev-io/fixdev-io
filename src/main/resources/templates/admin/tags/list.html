@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/admin-base}">
+<head><title>Теги</title></head>
+<body>
+<main layout:fragment="content">
+    <h1>Теги</h1>
+    <form th:action="@{/admin/tags}" method="post" style="display:flex;gap:0.5rem;margin-bottom:2rem;">
+        <input type="text" name="name" placeholder="Новый тег" required style="padding:0.5rem;">
+        <button type="submit">Добавить</button>
+    </form>
+    <div th:each="tag : ${tags}" style="display:flex;align-items:center;gap:1rem;padding:0.5rem 0;">
+        <span th:text="${tag.name}"></span>
+        <span style="color:#666" th:text="'/' + ${tag.slug}"></span>
+        <form th:action="@{/admin/tags/{id}/delete(id=${tag.id})}" method="post" style="display:inline">
+            <button type="submit" onclick="return confirm('Удалить тег?')">✕</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

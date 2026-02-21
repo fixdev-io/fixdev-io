@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/admin-base}">
+<head><title>Dashboard</title></head>
+<body>
+<main layout:fragment="content">
+    <h1>Dashboard</h1>
+    <div style="display:flex;gap:2rem;margin-top:2rem;">
+        <div><strong th:text="${publishedCount}">0</strong> опубликовано</div>
+        <div><strong th:text="${draftsCount}">0</strong> черновиков</div>
+        <div><strong th:text="${pendingCommentsCount}">0</strong> на модерации</div>
+    </div>
+</main>
+</body>
+</html>

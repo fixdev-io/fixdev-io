@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/admin-base}">
+<head><title>Комментарии</title></head>
+<body>
+<main layout:fragment="content">
+    <h1>Комментарии на модерации</h1>
+    <div th:each="comment : ${comments.content}" style="border-bottom:1px solid #333;padding:1rem 0;">
+        <strong th:text="${comment.user.name}"></strong> к <em th:text="${comment.article.title}"></em>
+        <p th:text="${comment.text}"></p>
+        <form th:action="@{/admin/comments/{id}/approve(id=${comment.id})}" method="post" style="display:inline">
+            <button type="submit">✓ Одобрить</button>
+        </form>
+        <form th:action="@{/admin/comments/{id}/reject(id=${comment.id})}" method="post" style="display:inline">
+            <button type="submit">✕ Отклонить</button>
+        </form>
+    </div>
+    <p th:if="${comments.content.isEmpty()}">Нет комментариев на модерации.</p>
+</main>
+</body>
+</html>
