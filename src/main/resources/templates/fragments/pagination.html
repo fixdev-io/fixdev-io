@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<nav th:fragment="pagination(page)" class="pagination">
+    <a th:if="${!page.first}" th:href="@{''(page=${page.number - 1})}">← Назад</a>
+    <span th:text="${page.number + 1} + ' / ' + ${page.totalPages}"></span>
+    <a th:if="${!page.last}" th:href="@{''(page=${page.number + 1})}">Вперёд →</a>
+</nav>

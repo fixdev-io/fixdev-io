@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head><title>FixDev — Backend Engineering</title></head>
+<body>
+<main layout:fragment="content">
+    <section class="blog-section">
+        <h1>FixDev</h1>
+        <p>Backend engineering services</p>
+        <a th:href="@{/blog}">Читать блог →</a>
+    </section>
+</main>
+</body>
+</html>

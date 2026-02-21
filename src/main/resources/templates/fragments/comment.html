@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="comment" class="comment">
+    <strong th:text="${comment.user.name}"></strong>
+    <time th:text="${#temporals.format(comment.createdAt, 'dd.MM.yyyy HH:mm')}"></time>
+    <p th:text="${comment.text}"></p>
+</div>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head><title th:text="${article.title}">Article</title></head>
+<body>
+<main layout:fragment="content">
+    <article class="blog-post">
+        <img th:if="${article.coverImageUrl}" th:src="${article.coverImageUrl}" alt="" class="blog-post-cover">
+        <h1 th:text="${article.title}"></h1>
+        <div class="blog-post-meta">
+            <time th:text="${#temporals.format(article.publishedAt, 'dd MMMM yyyy')}"></time>
+            <span th:each="tag : ${article.tags}">
+                <a th:href="@{/blog/tag/{slug}(slug=${tag.slug})}" th:text="${tag.name}" class="tag"></a>
+            </span>
+        </div>
+        <div class="blog-post-content" th:utext="${article.content}"></div>
+    </article>
+
+    <section class="comments" id="comments">
+        <h2>Комментарии</h2>
+        <div id="comment-list">
+            <div th:each="comment : ${comments}" class="comment">
+                <strong th:text="${comment.user.name}"></strong>
+                <time th:text="${#temporals.format(comment.createdAt, 'dd.MM.yyyy HH:mm')}"></time>
+                <p th:text="${comment.text}"></p>
+            </div>
+            <p th:if="${#lists.isEmpty(comments)}">Комментариев пока нет.</p>
+        </div>
+
+        <form th:if="${#authentication != null && #authentication.authenticated}"
+              hx-post="/blog/{slug}/comments"
+              th:attr="hx-post=@{/blog/{slug}/comments(slug=${article.slug})}"
+              hx-target="#comment-list"
+              hx-swap="beforeend">
+            <textarea name="text" placeholder="Ваш комментарий..." required></textarea>
+            <button type="submit">Отправить</button>
+        </form>
+        <p th:unless="${#authentication != null && #authentication.authenticated}">
+            <a th:href="@{/oauth2/authorization/keycloak}">Войдите</a>, чтобы оставить комментарий.
+        </p>
+    </section>
+</main>
+</body>
+</html>
