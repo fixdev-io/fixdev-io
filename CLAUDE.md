@@ -4,42 +4,64 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Static single-page portfolio website for FixDev (backend engineering services). The entire site is contained in one file: `index-v6.html` (~51KB) with inline CSS and JavaScript.
+Blog platform for FixDev built with Spring Boot 3 + Kotlin. Features include article management, tag filtering, HTMX-powered comments, Keycloak OAuth2 authentication, and an admin panel.
+
+## Tech Stack
+
+- **Backend:** Spring Boot 3.4.2, Kotlin 2.1.0, JDK 21 (Corretto)
+- **Database:** PostgreSQL 17, Flyway migrations, Spring Data JPA
+- **Auth:** Keycloak OIDC via Spring Security OAuth2
+- **Frontend:** Thymeleaf + Layout Dialect, HTMX 2.0.4
+- **Build:** Gradle 8.12 (Kotlin DSL)
+- **Testing:** JUnit 5, mockito-kotlin, H2 in-memory DB
 
 ## Development
 
-No build system, package manager, or dependencies. To preview locally:
-
 ```bash
-# Python
-python3 -m http.server 8080
+# Run tests
+./gradlew test
 
-# Node (if http-server is installed)
-npx http-server .
+# Build JAR
+./gradlew bootJar
+
+# Run locally (requires PostgreSQL + Keycloak)
+./gradlew bootRun
+
+# Docker production
+docker compose -f docker-compose.prod.yml up --build
 ```
 
-Open `index-v6.html` directly in a browser or via a local server.
+**Prerequisites:** PostgreSQL on `localhost:5432`, Keycloak on `localhost:8180`. See `docker-compose.yml` for dev services, `application.yml` for config.
 
 ## Architecture
 
-**Single-file structure** — all HTML, CSS (~650 lines), and JavaScript (~160 lines) are inline in `index-v6.html`.
-
-### CSS
-- CSS Custom Properties in `:root` for theming (dark theme, accent colors `#00e5a0` green, `#0099ff` blue)
-- Fonts: JetBrains Mono (monospace), Syne (display), Instrument Serif (accent) via Google Fonts
-- Responsive breakpoint at `max-width: 1024px` with `clamp()` for fluid typography
-- CSS Grid + Flexbox layouts; `@keyframes` animations for fade/reveal effects
-
-### JavaScript (Vanilla ES6+, no frameworks)
-Three modules:
-1. **Translation system** — i18n for RU (default) and EN using `data-t` attributes on DOM elements; language switcher with fade transition
-2. **Custom cursor** — dot + ring following mouse via `requestAnimationFrame`; ring expands on interactive element hover
-3. **Scroll system** — `IntersectionObserver` for reveal animations, nav blur/styling on scroll, smooth anchor scrolling
-
-### Page Sections
-Navigation → Hero (with animated SVG visualization) → About → Services (3-column grid) → Cases (2-column grid with metrics) → Blog (asymmetric grid) → Contact (form + links) → Footer
+```
+src/main/kotlin/io/fixdev/blog/
+├── config/          # SecurityConfig, KeycloakRoleConverter, MediaProperties
+├── controller/      # PublicController, CommentController
+│   └── admin/       # Admin CRUD controllers (articles, tags, comments, media)
+├── model/
+│   ├── dto/         # ArticleForm
+│   └── entity/      # JPA entities (User, Article, Tag, Comment, Media)
+├── repository/      # Spring Data JPA repositories
+└── service/         # ArticleService, CommentService, TagService, MediaService, etc.
+```
 
 ### Key Patterns
-- Translation keys: add `data-t="keyName"` attribute to elements; define translations in the JS `translations` object for both `ru` and `en`
-- Reveal animations: elements with `.reveal` class get `.visible` added when they enter viewport via IntersectionObserver
-- State is managed through CSS class toggling (`.active`, `.visible`, `.scrolled`, `.lang-switching`)
+
+- **Security:** `@WebMvcTest` tests mock `ClientRegistrationRepository` to avoid OIDC discovery. Admin endpoints require `ROLE_ADMIN`.
+- **Templates:** Thymeleaf with Layout Dialect. Public pages use `layout/base.html`, admin pages use `admin/layout/admin-base.html`.
+- **Comments:** HTMX POST to `/blog/{slug}/comments`, returns fragment `fragments/comment :: comment`.
+- **Slugs:** `SlugService` transliterates Cyrillic to Latin for URL-friendly slugs.
+- **HTML sanitization:** `HtmlSanitizer` uses jsoup Safelist to prevent XSS in article content.
+- **Media:** Files stored on disk at `app.media.upload-dir`, metadata in DB.
+
+### Test Configuration
+
+- Test profile: `application-test.yml` uses H2, disables Flyway and sessions.
+- `@WebMvcTest` tests must `@Import(SecurityConfig::class, KeycloakRoleConverter::class)` and mock `ClientRegistrationRepository`.
+- `@DataJpaTest` tests work with H2 directly.
+
+## Legacy
+
+`index-v6.html` is the original single-page portfolio site (reference only). CSS/JS were extracted into `src/main/resources/static/`.
