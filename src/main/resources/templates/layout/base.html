@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:title-pattern="$CONTENT_TITLE - FixDev">FixDev</title>
+    <meta name="description" th:attr="content=${seoDescription}" th:if="${seoDescription}">
+    <meta property="og:title" th:attr="content=${seoTitle}" th:if="${seoTitle}">
+    <meta property="og:description" th:attr="content=${seoDescription}" th:if="${seoDescription}">
+    <meta property="og:image" th:attr="content=${ogImage}" th:if="${ogImage}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/htmx.min.js}" defer></script>
+    <meta name="_csrf" th:attr="content=${_csrf.token}" th:if="${_csrf}">
+    <meta name="_csrf_header" th:attr="content=${_csrf.headerName}" th:if="${_csrf}">
+</head>
+<body>
+    <nav>
+        <a th:href="@{/}">FixDev</a>
+        <a th:href="@{/blog}">Blog</a>
+        <span th:if="${#authentication != null && #authentication.authenticated}">
+            <a th:href="@{/admin}" sec:authorize="hasRole('ADMIN')">Admin</a>
+            <form th:action="@{/logout}" method="post" style="display:inline">
+                <button type="submit">Выйти</button>
+            </form>
+        </span>
+        <a th:href="@{/oauth2/authorization/keycloak}" th:unless="${#authentication != null && #authentication.authenticated}">Войти</a>
+    </nav>
+
+    <main layout:fragment="content">
+    </main>
+
+    <footer>
+    </footer>
+
+    <script th:src="@{/js/main.js}" defer></script>
+</body>
+</html>

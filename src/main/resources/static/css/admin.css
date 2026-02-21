@@ -1,0 +1,6 @@
+/* Admin styles */
+.admin { display: flex; min-height: 100vh; }
+.admin-sidebar { width: 220px; padding: 2rem 1rem; background: #111; display: flex; flex-direction: column; gap: 0.5rem; }
+.admin-sidebar a { color: #ccc; text-decoration: none; padding: 0.5rem; border-radius: 4px; }
+.admin-sidebar a:hover { background: #222; color: #00e5a0; }
+.admin-content { flex: 1; padding: 2rem; }
