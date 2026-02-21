@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fixdev_blog
+    username: fixdev
+    password: fixdev_dev
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-secret: dev-secret
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8180/realms/fixdev
+
+app:
+  media:
+    upload-dir: ./dev-uploads

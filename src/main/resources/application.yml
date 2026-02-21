@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: fixdev-blog
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fixdev_blog
+    username: fixdev
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  session:
+    store-type: jdbc
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: fixdev-blog
+            client-secret: ${KEYCLOAK_CLIENT_SECRET}
+            scope: openid,profile,email
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_ISSUER_URI}
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+app:
+  media:
+    upload-dir: ${MEDIA_UPLOAD_DIR:./uploads}
+    allowed-types: image/jpeg,image/png,image/webp
+    max-size-bytes: 10485760

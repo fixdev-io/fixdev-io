@@ -7,5 +7,18 @@ node_modules/
 # Build output
 dist/
 build/
-/.idea/**
 
+# IDE
+/.idea/**
+*.iml
+out/
+
+# Gradle
+.gradle/
+
+# Uploads
+dev-uploads/
+uploads/
+
+# Logs
+*.log
