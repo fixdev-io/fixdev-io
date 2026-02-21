@@ -7,15 +7,5 @@ spring:
       ddl-auto: create-drop
   flyway:
     enabled: false
-  security:
-    oauth2:
-      client:
-        registration:
-          keycloak:
-            client-id: test
-            client-secret: test
-            authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-        provider:
-          keycloak:
-            issuer-uri: http://localhost:8180/realms/fixdev
+  session:
+    store-type: none
