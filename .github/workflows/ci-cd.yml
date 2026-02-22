@@ -57,6 +57,11 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             set -e
+            if [ ! -d /home/const/fixdev-io ]; then
+              git clone git@github.com:fixdev-io/fixdev-io.git /home/const/fixdev-io
+              cp /home/const/fixdev-io/deployment/.env.example /home/const/fixdev-io/deployment/.env
+              echo "First deploy: created repo and .env — edit deployment/.env with real values!"
+            fi
             cd /home/const/fixdev-io
             git pull origin main
             docker compose -f deployment/docker-compose.yml pull fixdev-blog
