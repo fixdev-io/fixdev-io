@@ -22,3 +22,6 @@ uploads/
 
 # Logs
 *.log
+
+# Deployment secrets
+deployment/.env
