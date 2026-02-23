@@ -1,3 +1,4 @@
+
 package io.fixdev.blog
 
 import io.fixdev.blog.config.MediaProperties
