@@ -4,7 +4,7 @@ import jakarta.persistence.*
 import java.time.Instant
 
 @Entity
-@Table(name = "media")
+@Table(name = "media", schema = "blog")
 class Media(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,

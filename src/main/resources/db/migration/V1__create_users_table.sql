@@ -1,4 +1,6 @@
-CREATE TABLE users (
+create schema if not exists blog;
+
+CREATE TABLE blog.users (
     id BIGSERIAL PRIMARY KEY,
     keycloak_sub VARCHAR(255) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,

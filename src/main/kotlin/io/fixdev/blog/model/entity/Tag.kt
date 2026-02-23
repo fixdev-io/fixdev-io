@@ -3,7 +3,7 @@ package io.fixdev.blog.model.entity
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "tags")
+@Table(name = "tags", schema = "blog")
 class Tag(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,

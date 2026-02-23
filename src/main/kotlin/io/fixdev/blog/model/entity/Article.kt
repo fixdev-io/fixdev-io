@@ -4,7 +4,7 @@ import jakarta.persistence.*
 import java.time.Instant
 
 @Entity
-@Table(name = "articles")
+@Table(name = "articles", schema = "blog")
 class Article(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
@@ -46,6 +46,7 @@ class Article(
     @ManyToMany
     @JoinTable(
         name = "article_tags",
+        schema = "blog",
         joinColumns = [JoinColumn(name = "article_id")],
         inverseJoinColumns = [JoinColumn(name = "tag_id")]
     )

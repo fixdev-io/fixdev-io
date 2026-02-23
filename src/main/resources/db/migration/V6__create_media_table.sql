@@ -1,4 +1,4 @@
-CREATE TABLE media (
+CREATE TABLE blog.media (
     id BIGSERIAL PRIMARY KEY,
     filename VARCHAR(500) NOT NULL,
     stored_path VARCHAR(1000) NOT NULL,

@@ -1,4 +1,4 @@
-CREATE TABLE articles (
+CREATE TABLE blog.articles (
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(500) NOT NULL,
     slug VARCHAR(500) NOT NULL UNIQUE,

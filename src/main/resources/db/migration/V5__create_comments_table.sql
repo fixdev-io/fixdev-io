@@ -1,4 +1,4 @@
-CREATE TABLE comments (
+CREATE TABLE blog.comments (
     id BIGSERIAL PRIMARY KEY,
     article_id BIGINT NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
     user_id BIGINT NOT NULL REFERENCES users(id),
