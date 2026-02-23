@@ -2,9 +2,7 @@ package io.fixdev.blog.controller.admin
 
 import io.fixdev.blog.config.KeycloakRoleConverter
 import io.fixdev.blog.config.SecurityConfig
-import io.fixdev.blog.service.ArticleService
-import io.fixdev.blog.service.TagService
-import io.fixdev.blog.service.UserService
+import io.fixdev.blog.service.*
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
@@ -30,6 +28,8 @@ class AdminArticleControllerTest @Autowired constructor(
     @MockitoBean lateinit var articleService: ArticleService
     @MockitoBean lateinit var tagService: TagService
     @MockitoBean lateinit var userService: UserService
+    @MockitoBean lateinit var auditService: AuditService
+    @MockitoBean lateinit var articleRevisionService: ArticleRevisionService
     @MockitoBean lateinit var clientRegistrationRepository: ClientRegistrationRepository
 
     @Test

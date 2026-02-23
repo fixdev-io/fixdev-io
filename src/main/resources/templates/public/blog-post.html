@@ -20,15 +20,14 @@
     <section class="comments" id="comments">
         <h2>Комментарии</h2>
         <div id="comment-list">
-            <div th:each="comment : ${comments}" class="comment">
-                <strong th:text="${comment.user.name}"></strong>
-                <time th:text="${#temporals.format(comment.createdAt, 'dd.MM.yyyy HH:mm')}"></time>
-                <p th:text="${comment.text}"></p>
-            </div>
-            <p th:if="${#lists.isEmpty(comments)}">Комментариев пока нет.</p>
+            <th:block th:each="comment : ${comments}">
+                <div th:replace="~{fragments/comment :: comment}"></div>
+            </th:block>
+            <p th:if="${#lists.isEmpty(comments)}" class="no-comments">Комментариев пока нет.</p>
         </div>
 
         <form th:if="${#authentication != null && #authentication.authenticated}"
+              class="comment-form"
               hx-post="/blog/{slug}/comments"
               th:attr="hx-post=@{/blog/{slug}/comments(slug=${article.slug})}"
               hx-target="#comment-list"
@@ -36,7 +35,7 @@
             <textarea name="text" placeholder="Ваш комментарий..." required></textarea>
             <button type="submit">Отправить</button>
         </form>
-        <p th:unless="${#authentication != null && #authentication.authenticated}">
+        <p th:unless="${#authentication != null && #authentication.authenticated}" class="comment-login">
             <a th:href="@{/oauth2/authorization/keycloak}">Войдите</a>, чтобы оставить комментарий.
         </p>
     </section>

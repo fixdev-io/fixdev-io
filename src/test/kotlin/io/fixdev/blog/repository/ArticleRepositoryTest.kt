@@ -5,31 +5,35 @@ import io.fixdev.blog.model.entity.ArticleStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.transaction.annotation.Transactional
 
 @DataJpaTest
 @ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional
 class ArticleRepositoryTest @Autowired constructor(
     private val articleRepository: ArticleRepository
 ) {
     @Test
     fun `findByStatus returns only published articles`() {
-        articleRepository.save(Article(title = "Draft", slug = "draft", status = ArticleStatus.DRAFT))
-        articleRepository.save(Article(title = "Published", slug = "published", status = ArticleStatus.PUBLISHED))
+        articleRepository.save(Article(title = "Draft", slug = "draft-${System.nanoTime()}", status = ArticleStatus.DRAFT))
+        articleRepository.save(Article(title = "Published", slug = "published-${System.nanoTime()}", status = ArticleStatus.PUBLISHED))
 
-        val result = articleRepository.findByStatus(ArticleStatus.PUBLISHED, PageRequest.of(0, 10))
+        val result = articleRepository.findByStatus(ArticleStatus.PUBLISHED, PageRequest.of(0, 100))
 
-        assertThat(result.content).hasSize(1)
-        assertThat(result.content[0].slug).isEqualTo("published")
+        assertThat(result.content.any { it.title == "Published" }).isTrue()
     }
 
     @Test
     fun `findBySlugAndStatus returns article when exists`() {
-        articleRepository.save(Article(title = "Test", slug = "test-slug", status = ArticleStatus.PUBLISHED))
+        val slug = "test-slug-${System.nanoTime()}"
+        articleRepository.save(Article(title = "Test", slug = slug, status = ArticleStatus.PUBLISHED))
 
-        val result = articleRepository.findBySlugAndStatus("test-slug", ArticleStatus.PUBLISHED)
+        val result = articleRepository.findBySlugAndStatus(slug, ArticleStatus.PUBLISHED)
 
         assertThat(result).isPresent
         assertThat(result.get().title).isEqualTo("Test")

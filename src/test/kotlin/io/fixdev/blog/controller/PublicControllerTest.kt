@@ -4,11 +4,8 @@ import io.fixdev.blog.config.KeycloakRoleConverter
 import io.fixdev.blog.config.SecurityConfig
 import io.fixdev.blog.model.entity.Article
 import io.fixdev.blog.model.entity.ArticleStatus
-import io.fixdev.blog.service.ArticleService
-import io.fixdev.blog.service.CommentService
-import io.fixdev.blog.service.MediaService
-import io.fixdev.blog.service.TagService
-import io.fixdev.blog.service.UserService
+import io.fixdev.blog.service.*
+import java.time.Instant
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
@@ -34,11 +31,12 @@ class PublicControllerTest @Autowired constructor(
     @MockitoBean lateinit var tagService: TagService
     @MockitoBean lateinit var mediaService: MediaService
     @MockitoBean lateinit var userService: UserService
+    @MockitoBean lateinit var homepageService: HomepageService
     @MockitoBean lateinit var clientRegistrationRepository: ClientRegistrationRepository
 
     @Test
     fun `GET blog returns blog list page`() {
-        whenever(articleService.findPublished(any())).thenReturn(PageImpl(emptyList()))
+        whenever(articleService.findPublished(any<String>(), any())).thenReturn(PageImpl(emptyList()))
         whenever(tagService.findAll()).thenReturn(emptyList())
 
         mockMvc.perform(get("/blog"))
@@ -48,7 +46,7 @@ class PublicControllerTest @Autowired constructor(
 
     @Test
     fun `GET blog article returns post page`() {
-        val article = Article(id = 1, title = "Test", slug = "test", status = ArticleStatus.PUBLISHED)
+        val article = Article(id = 1, title = "Test", slug = "test", status = ArticleStatus.PUBLISHED, publishedAt = Instant.now())
         whenever(articleService.findPublishedBySlug("test")).thenReturn(article)
         whenever(commentService.findApprovedByArticle(1L)).thenReturn(emptyList())
 

@@ -40,6 +40,18 @@ class Article(
     @Column(name = "created_at", nullable = false)
     val createdAt: Instant = Instant.now(),
 
+    @Column(name = "view_count", nullable = false)
+    var viewCount: Long = 0,
+
+    @Column(nullable = false)
+    var priority: Int = 0,
+
+    @Column(nullable = false)
+    var version: Int = 1,
+
+    @Column(nullable = false, length = 5)
+    var locale: String = "ru",
+
     @Column(name = "updated_at", nullable = false)
     var updatedAt: Instant = Instant.now(),
 

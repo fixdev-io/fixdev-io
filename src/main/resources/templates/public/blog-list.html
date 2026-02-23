@@ -5,20 +5,25 @@
 <head><title>Блог</title></head>
 <body>
 <main layout:fragment="content">
-    <section class="blog-section">
-        <h1>Блог</h1>
-        <div class="blog-tags" th:if="${tags}">
+    <section class="blog-list-section">
+        <div class="section-tag reveal">Блог</div>
+        <h2 class="section-title reveal reveal-delay-1">Статьи о backend</h2>
+
+        <div class="blog-filter-tags reveal reveal-delay-2" th:if="${tags}">
             <a th:href="@{/blog}" th:classappend="${currentTag == null} ? 'active'">Все</a>
             <a th:each="tag : ${tags}" th:href="@{/blog/tag/{slug}(slug=${tag.slug})}"
                th:text="${tag.name}" th:classappend="${currentTag?.id == tag.id} ? 'active'"></a>
         </div>
-        <div class="blog-grid">
+
+        <div class="blog-list-grid">
             <th:block th:each="article : ${articles.content}">
                 <div th:replace="~{fragments/article-card :: card(${article})}"></div>
             </th:block>
         </div>
+
+        <p th:if="${articles.content.isEmpty()}" class="blog-empty">Статей пока нет.</p>
+
         <div th:if="${articles.totalPages > 1}" th:replace="~{fragments/pagination :: pagination(${articles})}"></div>
-        <p th:if="${articles.content.isEmpty()}">Статей пока нет.</p>
     </section>
 </main>
 </body>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -12,29 +13,46 @@
     <meta property="og:image" th:attr="content=${ogImage}" th:if="${ogImage}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@300;400;500;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <script th:src="@{/js/htmx.min.js}" defer></script>
     <meta name="_csrf" th:attr="content=${_csrf.token}" th:if="${_csrf}">
     <meta name="_csrf_header" th:attr="content=${_csrf.headerName}" th:if="${_csrf}">
 </head>
 <body>
-    <nav>
-        <a th:href="@{/}">FixDev</a>
-        <a th:href="@{/blog}">Blog</a>
-        <span th:if="${#authentication != null && #authentication.authenticated}">
-            <a th:href="@{/admin}" sec:authorize="hasRole('ADMIN')">Admin</a>
-            <form th:action="@{/logout}" method="post" style="display:inline">
-                <button type="submit">Выйти</button>
-            </form>
-        </span>
-        <a th:href="@{/oauth2/authorization/keycloak}" th:unless="${#authentication != null && #authentication.authenticated}">Войти</a>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <nav id="nav">
+        <a th:href="@{/}" class="nav-logo">fix<span>dev</span>.io</a>
+        <ul class="nav-links">
+            <li><a th:href="@{/#about}">Обо мне</a></li>
+            <li><a th:href="@{/#services}">Услуги</a></li>
+            <li><a th:href="@{/#cases}">Кейсы</a></li>
+            <li><a th:href="@{/blog}">Блог</a></li>
+        </ul>
+        <div class="nav-right">
+            <span th:if="${#authentication != null && #authentication.authenticated}">
+                <a th:href="@{/admin}" sec:authorize="hasRole('ADMIN')" class="nav-auth-btn">Admin</a>
+                <form th:action="@{/logout}" method="post" class="nav-logout-form">
+                    <button type="submit" class="nav-auth-btn">Выйти</button>
+                </form>
+            </span>
+            <a th:href="@{/oauth2/authorization/keycloak}" th:unless="${#authentication != null && #authentication.authenticated}" class="nav-auth-btn">Войти</a>
+            <a th:href="@{/#contact}" class="nav-cta">Написать</a>
+            <span class="nav-locale" th:if="${currentLocale != null}">
+                <a th:href="@{/(lang=ru)}" th:classappend="${currentLocale == 'ru'} ? 'active'">RU</a>
+                <a th:href="@{/(lang=en)}" th:classappend="${currentLocale == 'en'} ? 'active'">EN</a>
+            </span>
+        </div>
     </nav>
 
     <main layout:fragment="content">
     </main>
 
     <footer>
+        <div class="footer-logo">fix<span>dev</span>.io</div>
+        <div class="footer-copy">&copy; 2026 &middot; Backend Engineer &middot; Java / Kotlin</div>
     </footer>
 
     <script th:src="@{/js/main.js}" defer></script>
