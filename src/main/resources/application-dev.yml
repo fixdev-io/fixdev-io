@@ -1,6 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/fixdev_blog
+
+    url: jdbc:postgresql://localhost:5400/fixdev_blog
     username: fixdev
     password: fixdev_dev
   security:
@@ -8,11 +9,14 @@ spring:
       client:
         registration:
           keycloak:
-            client-secret: dev-secret
+            client-secret: Awo49QjjVy8uXEYbZPMFYRgrhpJx3cll
         provider:
           keycloak:
-            issuer-uri: http://localhost:8180/realms/fixdev
+            issuer-uri: http://localhost:8181/realms/fixdev
 
 app:
   media:
     upload-dir: ./dev-uploads
+
+server:
+  port: 8090

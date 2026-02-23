@@ -27,25 +27,9 @@ services:
       - internal
     restart: unless-stopped
 
-  fixdev-postgres:
-    image: postgres:17
-    container_name: fixdev-postgres
-    environment:
-      POSTGRES_DB: fixdev_blog
-      POSTGRES_USER: fixdev
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    networks:
-      - internal
-    restart: unless-stopped
-
 networks:
   web:
     external: true
   internal:
     driver: bridge
 
-volumes:
-  pgdata:
-  uploads:
