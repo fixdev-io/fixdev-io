@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/admin-base}">
+<head><title>Кейс</title></head>
+<body>
+<main layout:fragment="content">
+    <h1 th:text="${caseStudy != null} ? 'Редактирование кейса' : 'Новый кейс'">Кейс</h1>
+    <form th:action="${caseStudy != null} ? @{/admin/cases/{id}/edit(id=${caseStudy.id})} : @{/admin/cases/new}"
+          method="post" th:object="${form}">
+        <div>
+            <label>Индустрия</label>
+            <input type="text" th:field="*{industry}" style="width:100%;padding:0.5rem;">
+        </div>
+        <div style="margin-top:1rem;">
+            <label>Название</label>
+            <input type="text" th:field="*{title}" required style="width:100%;padding:0.5rem;">
+        </div>
+        <div style="margin-top:1rem;">
+            <label>Описание</label>
+            <textarea th:field="*{description}" rows="3" style="width:100%;padding:0.5rem;"></textarea>
+        </div>
+        <div style="margin-top:1rem;display:flex;gap:1rem;">
+            <div style="flex:1">
+                <label>Язык</label>
+                <select th:field="*{locale}" style="width:100%;padding:0.5rem;">
+                    <option value="ru">Русский</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <div style="flex:1">
+                <label>Порядок</label>
+                <input type="number" th:field="*{sortOrder}" style="width:100%;padding:0.5rem;">
+            </div>
+        </div>
+        <div style="margin-top:1rem;">
+            <label><input type="checkbox" th:field="*{active}"> Активен</label>
+        </div>
+        <fieldset style="margin-top:1rem;border:1px solid #333;padding:1rem;">
+            <legend>Метрики</legend>
+            <div id="metrics">
+                <div th:each="i : ${#numbers.sequence(0, form.metricValues.size() > 0 ? form.metricValues.size() - 1 : -1)}" style="display:flex;gap:0.5rem;margin-bottom:0.5rem;">
+                    <input type="text" th:name="metricValues" th:value="${form.metricValues[i]}" placeholder="Значение" style="flex:1;padding:0.5rem;">
+                    <input type="text" th:name="metricLabels" th:value="${form.metricLabels[i]}" placeholder="Подпись" style="flex:2;padding:0.5rem;">
+                </div>
+            </div>
+            <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+                <input type="text" name="metricValues" placeholder="Значение (напр. 10M+)" style="flex:1;padding:0.5rem;">
+                <input type="text" name="metricLabels" placeholder="Подпись (напр. транзакций/день)" style="flex:2;padding:0.5rem;">
+            </div>
+        </fieldset>
+        <button type="submit" style="margin-top:1rem;padding:0.5rem 2rem;">Сохранить</button>
+    </form>
+</main>
+</body>
+</html>

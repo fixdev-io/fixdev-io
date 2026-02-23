@@ -1,5 +1,9 @@
 /* Admin styles — light theme */
-.admin { display: flex; min-height: 100vh; background: #f5f7fa; color: #1a1a1a; }
+.admin { display: flex; min-height: 100vh; background: #f5f7fa; color: #1a1a1a; cursor: auto; }
+.admin * { cursor: auto; }
+.admin .cursor, .admin .cursor-ring { display: none; }
+.admin button, .admin a, .admin [role="button"], .admin select { cursor: pointer; }
+.admin input, .admin textarea { cursor: text; }
 .admin-sidebar { width: 220px; padding: 2rem 1rem; background: #fff; border-right: 1px solid #e0e4e8; display: flex; flex-direction: column; gap: 0.5rem; }
 .admin-sidebar a { color: #555; text-decoration: none; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.95rem; }
 .admin-sidebar a:hover { background: #f0f2f5; color: #0066cc; }

@@ -28,6 +28,14 @@ class SecurityConfigTest @Autowired constructor(
     @MockitoBean lateinit var commentService: CommentService
     @MockitoBean lateinit var tagService: TagService
     @MockitoBean lateinit var mediaService: MediaService
+    @MockitoBean lateinit var homepageService: HomepageService
+    @MockitoBean lateinit var auditService: AuditService
+    @MockitoBean lateinit var articleRevisionService: ArticleRevisionService
+    @MockitoBean lateinit var serviceEntityService: ServiceEntityService
+    @MockitoBean lateinit var caseStudyService: CaseStudyService
+    @MockitoBean lateinit var contactLinkService: ContactLinkService
+    @MockitoBean lateinit var techTagService: TechTagService
+    @MockitoBean lateinit var pageBlockService: PageBlockService
     @MockitoBean lateinit var clientRegistrationRepository: ClientRegistrationRepository
 
     @Test

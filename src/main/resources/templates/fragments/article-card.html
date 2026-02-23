@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="card(article)" class="article-card">
+<div th:fragment="card(article)" class="blog-list-card reveal">
     <a th:href="@{/blog/{slug}(slug=${article.slug})}">
         <img th:if="${article.coverImageUrl}" th:src="${article.coverImageUrl}" alt="">
-        <h3 th:text="${article.title}"></h3>
-        <p th:text="${article.excerpt}" th:if="${article.excerpt}"></p>
-        <time th:text="${#temporals.format(article.publishedAt, 'dd MMMM yyyy')}" th:if="${article.publishedAt}"></time>
+        <div class="blog-tag-label" th:if="${!article.tags.isEmpty()}" th:text="${article.tags.iterator().next().name}"></div>
+        <div class="blog-date" th:text="${#temporals.format(article.publishedAt, 'dd MMMM yyyy')}" th:if="${article.publishedAt}"></div>
+        <div class="blog-title" th:text="${article.title}"></div>
+        <div class="blog-excerpt" th:if="${article.excerpt}" th:text="${article.excerpt}"></div>
+        <span class="blog-read-more">Читать <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
 </div>
+</html>

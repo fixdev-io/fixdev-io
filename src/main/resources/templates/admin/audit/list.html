@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/admin-base}">
+<head><title>Аудит</title></head>
+<body>
+<main layout:fragment="content">
+    <h1>Журнал аудита</h1>
+    <table style="width:100%;margin-top:1rem;">
+        <tr><th>Дата</th><th>Пользователь</th><th>Действие</th><th>Сущность</th><th>ID</th><th>Детали</th></tr>
+        <tr th:each="log : ${logs.content}">
+            <td th:text="${#temporals.format(log.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+            <td th:text="${log.user != null} ? ${log.user.name} : '—'"></td>
+            <td th:text="${log.action}"></td>
+            <td th:text="${log.entityType}"></td>
+            <td th:text="${log.entityId}"></td>
+            <td th:text="${log.details}"></td>
+        </tr>
+    </table>
+    <div th:if="${logs.totalPages > 1}" style="margin-top:1rem;">
+        <a th:if="${logs.number > 0}" th:href="@{/admin/audit(page=${logs.number - 1})}">← Назад</a>
+        <span th:text="'Стр. ' + ${logs.number + 1} + ' / ' + ${logs.totalPages}"></span>
+        <a th:if="${logs.number + 1 < logs.totalPages}" th:href="@{/admin/audit(page=${logs.number + 1})}">Вперёд →</a>
+    </div>
+</main>
+</body>
+</html>

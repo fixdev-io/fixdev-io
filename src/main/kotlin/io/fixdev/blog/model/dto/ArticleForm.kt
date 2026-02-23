@@ -11,5 +11,7 @@ data class ArticleForm(
     val seoTitle: String = "",
     val seoDescription: String = "",
     val tagIds: List<Long> = emptyList(),
-    val publish: Boolean = false
+    val publish: Boolean = false,
+    val priority: Int = 0,
+    val locale: String = "ru"
 )

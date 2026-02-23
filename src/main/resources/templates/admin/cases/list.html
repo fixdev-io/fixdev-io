@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/admin-base}">
+<head><title>Кейсы</title></head>
+<body>
+<main layout:fragment="content">
+    <h1>Кейсы</h1>
+    <a th:href="@{/admin/cases/new}">+ Новый кейс</a>
+    <table style="width:100%;margin-top:1rem;">
+        <tr><th>Индустрия</th><th>Название</th><th>Язык</th><th>Порядок</th><th>Активен</th><th></th></tr>
+        <tr th:each="cs : ${cases}">
+            <td th:text="${cs.industry}"></td>
+            <td><a th:href="@{/admin/cases/{id}/edit(id=${cs.id})}" th:text="${cs.title}"></a></td>
+            <td th:text="${cs.locale}"></td>
+            <td th:text="${cs.sortOrder}"></td>
+            <td th:text="${cs.active} ? 'Да' : 'Нет'"></td>
+            <td>
+                <form th:action="@{/admin/cases/{id}/delete(id=${cs.id})}" method="post" style="display:inline">
+                    <button type="submit" onclick="return confirm('Удалить?')">&#10005;</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</main>
+</body>
+</html>

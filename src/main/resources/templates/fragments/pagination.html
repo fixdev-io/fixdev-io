@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <nav th:fragment="pagination(page)" class="pagination">
-    <a th:if="${!page.first}" th:href="@{''(page=${page.number - 1})}">← Назад</a>
+    <a th:if="${!page.first}" th:href="@{''(page=${page.number - 1})}">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M13 8H3M3 8L7 4M3 8L7 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Назад
+    </a>
     <span th:text="${page.number + 1} + ' / ' + ${page.totalPages}"></span>
-    <a th:if="${!page.last}" th:href="@{''(page=${page.number + 1})}">Вперёд →</a>
+    <a th:if="${!page.last}" th:href="@{''(page=${page.number + 1})}">
+        Вперёд
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
 </nav>
+</html>

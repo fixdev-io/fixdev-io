@@ -1,9 +1,6 @@
 package io.fixdev.blog.controller
 
-import io.fixdev.blog.service.ArticleService
-import io.fixdev.blog.service.CommentService
-import io.fixdev.blog.service.MediaService
-import io.fixdev.blog.service.TagService
+import io.fixdev.blog.service.*
 import org.springframework.core.io.Resource
 import org.springframework.core.io.UrlResource
 import org.springframework.data.domain.PageRequest
@@ -23,19 +20,32 @@ class PublicController(
     private val articleService: ArticleService,
     private val commentService: CommentService,
     private val tagService: TagService,
-    private val mediaService: MediaService
+    private val mediaService: MediaService,
+    private val homepageService: HomepageService
 ) {
     @GetMapping("/")
-    fun home(): String = "public/index"
+    fun home(@RequestParam(defaultValue = "ru") lang: String, model: Model): String {
+        model.addAttribute("blocks", homepageService.getBlocksMap("index", lang))
+        model.addAttribute("services", homepageService.getServices(lang))
+        model.addAttribute("cases", homepageService.getCases(lang))
+        model.addAttribute("contacts", homepageService.getContacts(lang))
+        model.addAttribute("techTags", homepageService.getTechTags(lang))
+        val pageable = PageRequest.of(0, 3, Sort.by("priority").descending().and(Sort.by("publishedAt").descending()))
+        model.addAttribute("recentArticles", articleService.findPublished(lang, pageable).content)
+        model.addAttribute("currentLocale", lang)
+        return "public/index"
+    }
 
     @GetMapping("/blog")
     fun blogList(
         @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "ru") lang: String,
         model: Model
     ): String {
-        val pageable = PageRequest.of(page, 10, Sort.by("publishedAt").descending())
-        model.addAttribute("articles", articleService.findPublished(pageable))
+        val pageable = PageRequest.of(page, 10, Sort.by("priority").descending().and(Sort.by("publishedAt").descending()))
+        model.addAttribute("articles", articleService.findPublished(lang, pageable))
         model.addAttribute("tags", tagService.findAll())
+        model.addAttribute("currentLocale", lang)
         return "public/blog-list"
     }
 
@@ -43,12 +53,14 @@ class PublicController(
     fun blogByTag(
         @PathVariable slug: String,
         @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "ru") lang: String,
         model: Model
     ): String {
-        val pageable = PageRequest.of(page, 10, Sort.by("publishedAt").descending())
-        model.addAttribute("articles", articleService.findPublishedByTag(slug, pageable))
+        val pageable = PageRequest.of(page, 10, Sort.by("priority").descending().and(Sort.by("publishedAt").descending()))
+        model.addAttribute("articles", articleService.findPublishedByTag(slug, lang, pageable))
         model.addAttribute("tags", tagService.findAll())
         model.addAttribute("currentTag", tagService.findBySlug(slug))
+        model.addAttribute("currentLocale", lang)
         return "public/blog-list"
     }
 
@@ -56,6 +68,7 @@ class PublicController(
     fun blogPost(@PathVariable slug: String, model: Model): String {
         val article = articleService.findPublishedBySlug(slug)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        articleService.incrementViewCount(article.id)
         model.addAttribute("article", article)
         model.addAttribute("comments", commentService.findApprovedByArticle(article.id))
         model.addAttribute("seoTitle", article.seoTitle ?: article.title)

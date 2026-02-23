@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/admin-base}">
+<head><title>Контакты</title></head>
+<body>
+<main layout:fragment="content">
+    <h1>Контактные ссылки</h1>
+    <table style="width:100%;margin-top:1rem;">
+        <tr><th>Иконка</th><th>Название</th><th>URL</th><th>Язык</th><th>Порядок</th><th></th></tr>
+        <tr th:each="cl : ${contacts}">
+            <td th:text="${cl.icon}"></td>
+            <td th:text="${cl.label}"></td>
+            <td th:text="${cl.url}"></td>
+            <td th:text="${cl.locale}"></td>
+            <td th:text="${cl.sortOrder}"></td>
+            <td>
+                <form th:action="@{/admin/contacts/{id}/delete(id=${cl.id})}" method="post" style="display:inline">
+                    <button type="submit" onclick="return confirm('Удалить?')">&#10005;</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <h3 style="margin-top:2rem;">Добавить контакт</h3>
+    <form th:action="@{/admin/contacts/new}" method="post" style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:end;">
+        <div><label>Иконка</label><input type="text" name="icon" style="padding:0.5rem;width:60px;"></div>
+        <div><label>Название</label><input type="text" name="label" required style="padding:0.5rem;"></div>
+        <div><label>URL</label><input type="text" name="url" required style="padding:0.5rem;"></div>
+        <div><label>Язык</label><select name="locale" style="padding:0.5rem;"><option value="ru">RU</option><option value="en">EN</option></select></div>
+        <div><label>Порядок</label><input type="number" name="sortOrder" value="0" style="padding:0.5rem;width:60px;"></div>
+        <button type="submit" style="padding:0.5rem 1rem;">Добавить</button>
+    </form>
+</main>
+</body>
+</html>

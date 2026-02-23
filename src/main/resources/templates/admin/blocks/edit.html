@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/admin-base}">
+<head><title>Блоки страниц</title></head>
+<body>
+<main layout:fragment="content">
+    <h1>Блоки страниц</h1>
+    <div style="margin-bottom:1rem;">
+        <a th:href="@{/admin/blocks(locale='ru')}" th:classappend="${currentLocale == 'ru'} ? 'active'">RU</a> |
+        <a th:href="@{/admin/blocks(locale='en')}" th:classappend="${currentLocale == 'en'} ? 'active'">EN</a>
+    </div>
+    <form th:action="@{/admin/blocks}" method="post">
+        <input type="hidden" name="locale" th:value="${currentLocale}">
+        <div th:each="block : ${blocks}" style="margin-bottom:1rem;border-bottom:1px solid #333;padding-bottom:1rem;">
+            <input type="hidden" name="ids" th:value="${block.id}">
+            <label style="font-weight:bold;" th:text="${block.section + ' → ' + block.key}"></label>
+            <textarea name="values" th:text="${block.value}" rows="3" style="width:100%;padding:0.5rem;margin-top:0.25rem;"></textarea>
+        </div>
+        <button type="submit" style="padding:0.5rem 2rem;">Сохранить</button>
+    </form>
+    <p th:if="${#lists.isEmpty(blocks)}">Нет блоков для выбранной локали.</p>
+</main>
+</body>
+</html>

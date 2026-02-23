@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/admin-base}">
+<head><title>Ревизии</title></head>
+<body>
+<main layout:fragment="content">
+    <h1>Ревизии: <span th:text="${article.title}"></span></h1>
+    <a th:href="@{/admin/articles/{id}/edit(id=${article.id})}">← Назад к редактированию</a>
+    <table style="width:100%;margin-top:1rem;">
+        <tr><th>Версия</th><th>Заголовок</th><th>Редактор</th><th>Дата</th></tr>
+        <tr th:each="rev : ${revisions}">
+            <td th:text="${rev.version}"></td>
+            <td th:text="${rev.title}"></td>
+            <td th:text="${rev.editor != null} ? ${rev.editor.name} : '—'"></td>
+            <td th:text="${#temporals.format(rev.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+        </tr>
+    </table>
+    <p th:if="${#lists.isEmpty(revisions)}">Ревизий пока нет.</p>
+</main>
+</body>
+</html>

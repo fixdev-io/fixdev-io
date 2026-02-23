@@ -1,8 +1,9 @@
 package io.fixdev.blog.controller.admin
 
 import io.fixdev.blog.model.dto.ArticleForm
-import io.fixdev.blog.service.ArticleService
-import io.fixdev.blog.service.TagService
+import io.fixdev.blog.model.entity.AuditAction
+import io.fixdev.blog.model.entity.AuditEntityType
+import io.fixdev.blog.service.*
 import jakarta.validation.Valid
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/admin/articles")
 class AdminArticleController(
     private val articleService: ArticleService,
-    private val tagService: TagService
+    private val tagService: TagService,
+    private val userService: UserService,
+    private val auditService: AuditService,
+    private val articleRevisionService: ArticleRevisionService
 ) {
     @GetMapping
     fun list(@RequestParam(defaultValue = "0") page: Int, model: Model): String {
@@ -37,7 +41,9 @@ class AdminArticleController(
             model.addAttribute("tags", tagService.findAll())
             return "admin/articles/form"
         }
+        val currentUser = userService.getCurrentUser()
         val article = articleService.create(form)
+        auditService.log(currentUser, AuditAction.CREATE, AuditEntityType.ARTICLE, article.id, "Created: ${article.title}")
         return "redirect:/admin/articles/${article.id}/edit"
     }
 
@@ -52,7 +58,9 @@ class AdminArticleController(
             seoTitle = article.seoTitle ?: "",
             seoDescription = article.seoDescription ?: "",
             tagIds = article.tags.map { it.id },
-            publish = false
+            publish = false,
+            priority = article.priority,
+            locale = article.locale
         ))
         model.addAttribute("article", article)
         model.addAttribute("tags", tagService.findAll())
@@ -65,13 +73,26 @@ class AdminArticleController(
             model.addAttribute("tags", tagService.findAll())
             return "admin/articles/form"
         }
-        articleService.update(id, form)
+        val currentUser = userService.getCurrentUser()
+        articleService.update(id, form, currentUser)
+        auditService.log(currentUser, AuditAction.UPDATE, AuditEntityType.ARTICLE, id, "Updated: ${form.title}")
         return "redirect:/admin/articles/${id}/edit"
     }
 
     @PostMapping("/{id}/delete")
     fun delete(@PathVariable id: Long): String {
+        val article = articleService.findById(id)
+        val currentUser = userService.getCurrentUser()
         articleService.delete(id)
+        auditService.log(currentUser, AuditAction.DELETE, AuditEntityType.ARTICLE, id, "Deleted: ${article?.title}")
         return "redirect:/admin/articles"
+    }
+
+    @GetMapping("/{id}/revisions")
+    fun revisions(@PathVariable id: Long, model: Model): String {
+        val article = articleService.findById(id) ?: return "redirect:/admin/articles"
+        model.addAttribute("article", article)
+        model.addAttribute("revisions", articleRevisionService.findByArticleId(id))
+        return "admin/articles/revisions"
     }
 }

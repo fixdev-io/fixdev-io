@@ -2,6 +2,7 @@ package io.fixdev.blog.service
 
 import io.fixdev.blog.model.entity.User
 import io.fixdev.blog.repository.UserRepository
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -26,4 +27,13 @@ class UserService(private val userRepository: UserRepository) {
 
     fun findByKeycloakSub(sub: String): User? =
         userRepository.findByKeycloakSub(sub).orElse(null)
+
+    fun getCurrentUser(): User? {
+        val auth = SecurityContextHolder.getContext().authentication ?: return null
+        val principal = auth.principal
+        if (principal is OidcUser) {
+            return findByKeycloakSub(principal.subject)
+        }
+        return null
+    }
 }

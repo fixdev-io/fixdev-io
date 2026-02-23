@@ -1,0 +1,7 @@
+CREATE TABLE blog.tech_tags (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    accent BOOLEAN NOT NULL DEFAULT FALSE,
+    locale VARCHAR(5) NOT NULL DEFAULT 'ru',
+    sort_order INT NOT NULL DEFAULT 0
+);

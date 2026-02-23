@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/admin-base}">
+<head><title>Тех. теги</title></head>
+<body>
+<main layout:fragment="content">
+    <h1>Технологические теги</h1>
+    <table style="width:100%;margin-top:1rem;">
+        <tr><th>Название</th><th>Акцент</th><th>Язык</th><th>Порядок</th><th></th></tr>
+        <tr th:each="tt : ${techTags}">
+            <td th:text="${tt.name}"></td>
+            <td th:text="${tt.accent} ? 'Да' : 'Нет'"></td>
+            <td th:text="${tt.locale}"></td>
+            <td th:text="${tt.sortOrder}"></td>
+            <td>
+                <form th:action="@{/admin/tech-tags/{id}/delete(id=${tt.id})}" method="post" style="display:inline">
+                    <button type="submit" onclick="return confirm('Удалить?')">&#10005;</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <h3 style="margin-top:2rem;">Добавить тег</h3>
+    <form th:action="@{/admin/tech-tags/new}" method="post" style="display:flex;gap:0.5rem;align-items:end;">
+        <div><label>Название</label><input type="text" name="name" required style="padding:0.5rem;"></div>
+        <div><label><input type="checkbox" name="accent"> Акцент</label></div>
+        <div><label>Язык</label><select name="locale" style="padding:0.5rem;"><option value="ru">RU</option><option value="en">EN</option></select></div>
+        <div><label>Порядок</label><input type="number" name="sortOrder" value="0" style="padding:0.5rem;width:60px;"></div>
+        <button type="submit" style="padding:0.5rem 1rem;">Добавить</button>
+    </form>
+</main>
+</body>
+</html>

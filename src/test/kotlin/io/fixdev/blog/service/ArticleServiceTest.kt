@@ -21,6 +21,7 @@ class ArticleServiceTest {
     @Mock lateinit var tagRepository: TagRepository
     @Mock lateinit var slugService: SlugService
     @Mock lateinit var htmlSanitizer: HtmlSanitizer
+    @Mock lateinit var articleRevisionService: ArticleRevisionService
 
     @InjectMocks lateinit var articleService: ArticleService
 
