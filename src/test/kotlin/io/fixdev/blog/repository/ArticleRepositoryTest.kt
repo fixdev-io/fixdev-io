@@ -9,11 +9,14 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.ContextConfiguration
+import io.fixdev.blog.infra.TestcontainerDbContextInitializer
 import org.springframework.transaction.annotation.Transactional
 
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ContextConfiguration(initializers = [TestcontainerDbContextInitializer::class])
 @Transactional
 class ArticleRepositoryTest @Autowired constructor(
     private val articleRepository: ArticleRepository

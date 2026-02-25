@@ -35,6 +35,19 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
 app:
   media:
     upload-dir: ${MEDIA_UPLOAD_DIR:./uploads}

@@ -1,8 +1,4 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5400/fixdev_blog
-    username: fixdev
-    password: fixdev_dev
   jpa:
     hibernate:
       ddl-auto: validate

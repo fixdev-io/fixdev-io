@@ -23,6 +23,8 @@ class SecurityConfig(
         http
             .authorizeHttpRequests { auth ->
                 auth
+                    .requestMatchers("/actuator/health", "/actuator/info", "/actuator/prometheus").permitAll()
+                    .requestMatchers("/actuator/**").hasRole("ADMIN")
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .requestMatchers("/blog/*/comments").authenticated()
                     .anyRequest().permitAll()
