@@ -61,3 +61,4 @@ jobs:
             docker compose pull fixdev-blog
             docker compose up -d fixdev-blog
             docker compose ps
+            
