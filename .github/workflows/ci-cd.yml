@@ -44,21 +44,15 @@ jobs:
             ghcr.io/fixdev-io/fixdev-io:latest
             ghcr.io/fixdev-io/fixdev-io:sha-${{ github.sha }}
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Deploy to Contabo
-        uses: appleboy/ssh-action@v1
+      # Выкатку делает инфра-репо: прод — Docker Swarm, стек `push_helper`, сервис
+      # `push_helper_fixdev-blog` описан в push-helper-infra/docker-compose.push-helper.yml
+      # и раскатывается его playbooks/deploy.yml (docker stack deploy --with-registry-auth).
+      # Отсюда только сигнал — как в freelance-bot и push-helper. Требует секрет
+      # DEPLOY_TOKEN: PAT с правом repo на fixdev-io/push-helper-infra.
+      - name: Trigger production deploy
+        uses: peter-evans/repository-dispatch@v3
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            set -euo pipefail
-            cd /home/const/mobile-push-helper-deployment
-            docker compose pull fixdev-blog
-            docker compose up -d fixdev-blog
-            docker compose ps
-            
+          token: ${{ secrets.DEPLOY_TOKEN }}
+          repository: fixdev-io/push-helper-infra
+          event-type: deploy
+          client-payload: '{"environment": "production"}'
